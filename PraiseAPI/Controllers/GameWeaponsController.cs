@@ -1,0 +1,16 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace PraiseAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GameWeaponsController : ControllerBase
+    {
+
+        //GetWeapons
+        //GetWeaponConfigs
+        //GetWeaponMods;
+        //GetWeaponAbilities
+    }
+}
