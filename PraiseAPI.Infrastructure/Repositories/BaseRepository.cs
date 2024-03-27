@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Localization;
 using PraiseAPI.Domain.Entities;
 using PraiseAPI.Domain.Repositories;
+using PraiseAPI.Domain.Specifications;
 using PraiseAPI.Infrastructure.Context;
 using PraiseAPI.Infrastructure.Resources;
 using PraiseAPI.Infrastructure.Utilities.ResponseModels;
@@ -42,7 +43,7 @@ namespace PraiseAPI.Infrastructure.Repositories
             return null;
         }
 
-        public T Post(T entity)
+        public T Add(T entity)
         {
             var newEntry = _dbSet.Add(entity);
 
@@ -84,5 +85,9 @@ namespace PraiseAPI.Infrastructure.Repositories
 
             return true;
         }
+
+        public IQueryable<T> Query(ISpecification<T> specification)
+            => _dbSet.Where(specification.Criteria());
+        
     }
 }

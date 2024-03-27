@@ -8,7 +8,7 @@ using System.Net;
 namespace PraiseAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthController : PraiseApiControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
         private readonly IUsersMgmtService _usersMgmtService;
@@ -58,6 +58,18 @@ namespace PraiseAPI.Controllers
 
             if (response != null)
                 return response.HasError() ? LogResponse(response.Error) : Ok();
+
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+
+        [HttpPost("game/signup")]
+        //[Authorize("anon")]
+        public async Task<IActionResult> GameSignUp([FromBody] GameSignUpRequest userSignUp)
+        {
+            var response = _usersMgmtService.GameSignUp(userSignUp);
+
+            if (response != null)
+                return response.HasError() ? LogResponse(response.Error) : Ok(response);
 
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }

@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Localization;
 using PraiseAPI.Domain.DTOs;
+using PraiseAPI.Domain.DTOs.RequestModels.Filters;
 using PraiseAPI.Domain.DTOs.ResponseModels.Extensions;
 using PraiseAPI.Domain.Entities;
 using PraiseAPI.Domain.Mappers;
 using PraiseAPI.Domain.Repositories;
 using PraiseAPI.Domain.Services;
 using PraiseAPI.Infrastructure.Repositories;
+using PraiseAPI.Infrastructure.Specifications.Users;
 using PraiseAPI.Infrastructure.Utilities.ResponseModels;
 using PraiseAPI.Resources;
 
@@ -35,10 +37,10 @@ namespace PraiseAPI.Services
         {
             var entity = _rolesRepository.GetById(roleId);
 
-            return entity != null ? 
+            return entity != null ?
                 new SingleResponse<RoleDto>(_rolesMapper.MapToDto(entity)) :
-                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRole)} - " + _errorLoc["DbError-GET"])
-                    .LogResponse(_logService) as SingleResponse<RoleDto>;
+                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRole)} - " + _errorLoc["DbError-GET"]);
+                    
             // return new SingleResponse<RoleDto>()
         }
 
@@ -48,8 +50,8 @@ namespace PraiseAPI.Services
 
             return entity != null ?
                 new SingleResponse<RoleDto>(_rolesMapper.MapToDto(entity)) :
-                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRole)} - " + _errorLoc["DbError-GET"])
-                    .LogResponse(_logService) as SingleResponse<RoleDto>;
+                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRole)} - " + _errorLoc["DbError-GET"]);
+                  
         }
 
         public CollectionResponse<RoleDto> GetRoles()
@@ -58,8 +60,8 @@ namespace PraiseAPI.Services
 
             return entities.Count() > 0 != null ?
                 new CollectionResponse<RoleDto>(_rolesMapper.MapManyToDto(entities)) :
-                new CollectionResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRoles)} - " + _errorLoc["DbError-GET"])
-                    .LogResponse(_logService) as CollectionResponse<RoleDto>;
+                new CollectionResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(GetRoles)} - " + _errorLoc["DbError-GET"]);
+                   
         }
 
         public SingleResponse<RoleDto> AddRole(RoleDto roleDto)
@@ -77,16 +79,14 @@ namespace PraiseAPI.Services
 
             ApiError error = new ApiError();
             if (!_rolesRepository.CanAdd(entity, out error))
-                return new SingleResponse<RoleDto>(-1, error.Msg)
-                    .LogResponse(_logService) as SingleResponse<RoleDto>;
-
-
-            var newEntity = _rolesRepository.Post(entity);
+                return new SingleResponse<RoleDto>(-1, error.Msg);
+                   
+            var newEntity = _rolesRepository.Add(entity);
 
             return newEntity != null ?
                 new SingleResponse<RoleDto>(_rolesMapper.MapToDto(newEntity)) :
-                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(AddRole)} - " + _errorLoc["DbError-INSERT"])
-                    .LogResponse(_logService) as SingleResponse<RoleDto>;
+                new SingleResponse<RoleDto>(-1, $"{nameof(RolesMgmtService)}-{nameof(AddRole)} - " + _errorLoc["DbError-INSERT"]);
+                   
         }
 
         public SingleResponse<RoleDto> UpdateRole(RoleDto roleDto)
@@ -133,10 +133,9 @@ namespace PraiseAPI.Services
 
             var error = new ApiError();
             if (!_userRolesRepository.CanAdd(insert, out error))
-                return new SingleResponse<RoleDto>(-1, error.Msg)
-                    .LogResponse(_logService) as SingleResponse<RoleDto>;
+                return new SingleResponse<RoleDto>(-1, error.Msg);
 
-            var result = _userRolesRepository.Post(insert);
+            var result = _userRolesRepository.Add(insert);
 
             return insert != null ?
                 new SingleResponse<RoleDto>(_rolesMapper.MapToDto(result.Role)) :
@@ -206,5 +205,11 @@ namespace PraiseAPI.Services
             return RemoveUserRole(user.Id, role.Id);
         }
 
+        public CollectionResponse<RoleDto> GetRoles(RolesQueryFilter filter)
+        {
+            var roles = _rolesRepository.Query(new RolesFilterSpecification(filter));
+
+            return new CollectionResponse<RoleDto>(_rolesMapper.MapManyToDto(roles));
+        }
     }
 }

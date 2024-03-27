@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 
 namespace PraiseAPI.Services
 {
+    //https://code-maze.com/csharp-hashing-salting-passwords-best-practices/
     public class PasswordHasher : IPasswordHasher
     {
         public string HashPass(string password, int saltSize, int keySize, int iterations)

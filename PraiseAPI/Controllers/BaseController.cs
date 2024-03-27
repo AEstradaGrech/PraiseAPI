@@ -8,14 +8,14 @@ using System.Net;
 namespace PraiseAPI.Controllers
 {
     [ApiController]
-    public class PraiseApiControllerBase : ControllerBase
+    public class BaseController : ControllerBase
     {
         protected readonly IApiLogService _apiLog;
         protected readonly IHttpContextAccessor _contextAccessor;
         protected readonly string _clientId;
         public bool ShouldReturnDataOnly => _clientId == "praise-game";
 
-        public PraiseApiControllerBase(IApiLogService apiLog, IHttpContextAccessor contextAccessor) : base()
+        public BaseController(IApiLogService apiLog, IHttpContextAccessor contextAccessor) : base()
         {
             _apiLog = apiLog;
          

@@ -9,7 +9,7 @@ using System.Net;
 namespace PraiseAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController : PraiseApiControllerBase
+    public class UsersController : BaseController
     {
         //User
         //  BattlePass <- consumir como los cupones de BP. DAO + SP
@@ -105,17 +105,6 @@ namespace PraiseAPI.Controllers
         public async Task<IActionResult> Discharge(string userEmail)
         {
             var response = _usersMgmtService.Discharge(userEmail);
-
-            if (response != null)
-                return response.HasError() ? LogResponse(response.Error) : Ok(response);
-
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-
-        [HttpPost("game/signup")]
-        public async Task<IActionResult> GameSignUp([FromBody] GameSignUpRequest userSignUp)
-        {
-            var response = _usersMgmtService.GameSignUp(userSignUp);
 
             if (response != null)
                 return response.HasError() ? LogResponse(response.Error) : Ok(response);

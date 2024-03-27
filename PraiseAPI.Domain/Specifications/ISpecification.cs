@@ -11,6 +11,6 @@ namespace PraiseAPI.Domain.Specifications
     public interface ISpecification<T> where T : Entity
     {
         Expression<Func<T, bool>> Predicate { get; }
-        Expression<Func<T, bool>> SatisfiedBy();
+        Expression<Func<T, bool>> Criteria();
     }
 }

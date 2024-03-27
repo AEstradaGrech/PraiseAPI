@@ -1,5 +1,6 @@
 ﻿
 using PraiseAPI.Domain.DTOs;
+using PraiseAPI.Domain.DTOs.RequestModels.Filters;
 using PraiseAPI.Infrastructure.Utilities.ResponseModels;
 
 namespace PraiseAPI.Domain.Services
@@ -12,6 +13,7 @@ namespace PraiseAPI.Domain.Services
         SingleResponse<RoleDto> UpdateRole(RoleDto roleDto);
         SingleResponse<RoleDto> DeleteRole(string roleName);
         CollectionResponse<RoleDto> GetRoles();
+        CollectionResponse<RoleDto> GetRoles(RolesQueryFilter filter);
         CollectionResponse<RoleDto> GetUserRoles(int userId);
         CollectionResponse<RoleDto> GetUserRoles(string userName);
         SingleResponse<RoleDto> AddUserRole(int userId, int roleId);

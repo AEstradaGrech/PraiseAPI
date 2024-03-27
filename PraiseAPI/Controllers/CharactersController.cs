@@ -8,7 +8,7 @@ using System.Net;
 namespace PraiseAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class CharactersController : PraiseApiControllerBase
+    public class CharactersController : BaseController
     {
 
         //Character

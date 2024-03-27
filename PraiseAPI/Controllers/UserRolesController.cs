@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PraiseAPI.Domain.DTOs;
+using PraiseAPI.Domain.DTOs.RequestModels.Filters;
 using PraiseAPI.Domain.Services;
 using System.Net;
 
@@ -9,8 +10,8 @@ namespace PraiseAPI.Controllers
 {
     [Route("api/user-roles")]
     [ApiController]
-    [Authorize("Management")]
-    public class UserRolesController : PraiseApiControllerBase
+    //[Authorize("Management")]
+    public class UserRolesController : BaseController
     {
         private readonly IRolesMgmtService _rolesMgmtService;
 
@@ -111,6 +112,17 @@ namespace PraiseAPI.Controllers
         public async Task<IActionResult> RemoveUserRole(string userName, string roleName)
         {
             var response = _rolesMgmtService.RemoveUserRole(userName, roleName);
+
+            if (response != null)
+                return response.HasError() ? LogResponse(response.Error) : Ok(response);
+
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> Filter([FromBody] RolesQueryFilter filter)
+        {
+            var response = _rolesMgmtService.GetRoles(filter);
 
             if (response != null)
                 return response.HasError() ? LogResponse(response.Error) : Ok(response);

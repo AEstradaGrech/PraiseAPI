@@ -27,7 +27,7 @@ namespace PraiseAPI.Infrastructure.Repositories
                 DbSet.SingleOrDefault(x => x.UserId == character.UserId && x.IsCurrentCharacter == true).IsCurrentCharacter = false;
             }
 
-            return Post(character);
+            return Add(character);
         }
 
         public bool CanAdd(PraiseCharacter character, out ApiError outError)

@@ -76,7 +76,7 @@ namespace PraiseAPI.Services
 
             mappedEntity.Password = _authService.HashPass(userDto.UserPassword);
 
-            var newEntity = _usersRepository.Post(mappedEntity);
+            var newEntity = _usersRepository.Add(mappedEntity);
 
             return newEntity != null ? 
                 new SingleResponse<UserDto>(_usersMapper.MapToDto(newEntity)) : 
